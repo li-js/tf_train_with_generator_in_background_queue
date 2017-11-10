@@ -18,7 +18,12 @@ h, w = 321, 321
 image_batch0 = tf.placeholder(shape=(BATCH_SIZE,h,w,3), dtype=tf.float32)
 label_batch0 = tf.placeholder(shape=(BATCH_SIZE,), dtype=tf.int32)
 
-data_queue = tf.FIFOQueue(capacity=5, dtypes=[tf.float32, tf.int32], shapes=[(BATCH_SIZE,h,w,3), (BATCH_SIZE,)])
+data_queue = tf.FIFOQueue(capacity=5, dtypes=[tf.float32, tf.int32], shapes=[(BATCH_SIZE,h,w,3), (BATCH_SIZE,)]) 
+# data_queue accepts fixed shapes, can dequeu a batch of items with dequeue_op = data_queue.dequeue_many(BATCH)
+
+data_queue2 = tf.FIFOQueue(capacity=5, dtypes=[tf.float32, tf.int32])  
+# data_queue2 accepts variable shapes, but can only dequeu one item when shape varies. 
+
 enqueue_op = data_queue.enqueue( (image_batch0, label_batch0) )
 dequeue_op = data_queue.dequeue()
 image_batch, label_batch = dequeue_op
